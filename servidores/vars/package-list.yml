@@ -1,15 +1,14 @@
 ---
 packages_base:
   - [ 'ansible',
-    'smartmontools',
-    'bridge-utils',
-    'ifenslave',
-    'screen',
-    'rsync',
-    'byobu',
-    'pwgen',
     'fail2ban']
-    #- smartmontools
+    #    'smartmontools',
+    #'bridge-utils',
+    #'ifenslave',
+    #'screen',
+    #'rsync',
+    #'byobu',
+    #'pwgen',
     #- bridge-utils
     #- ifenslave
     #- rsync
