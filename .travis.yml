@@ -8,5 +8,5 @@ install:
 
 script:
   - "ansible-playbook -i inventory/hosts.example --syntax-check servidores/*yml"
-  - "sudo ansible-playbook -i inventory/hosts.example --syntax-check servidores/01-upgrade.yml"
-  - "sudo ansible-playbook -i inventory/hosts.example --syntax-check servidores/02-base_setup.yml"
+  - "sudo ansible-playbook -i inventory/hosts.example servidores/01-upgrade.yml"
+  - "sudo ansible-playbook -i inventory/hosts.example servidores/02-base_setup.yml"
