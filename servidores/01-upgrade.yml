@@ -1,0 +1,17 @@
+---
+- name: Actualiza los equipos virtuales como preparación de examen
+  hosts: all
+  tasks:
+    - name: Instala aptitude (requerido por ansible)
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: yes
+      become: yes
+    - name: Actualiza cache, paquetes, y autoremueve
+      apt:
+        upgrade: dist 
+        update_cache: yes
+        # autoremove not available in 16.04's ansible
+        # autoremove: yes
+      become: yes

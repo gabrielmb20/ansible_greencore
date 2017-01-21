@@ -1,0 +1,85 @@
+---
+- name: Instala un servidor de virtualización y contenedores
+  hosts: all
+  tasks:
+    - name: Deshabilita biosdevname
+      lineinfile:
+        regexp: '^GRUB_CMDLINE_LINUX=""'
+        dest: "/etc/default/grub"
+        line: 'GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"'
+        state: present
+        backrefs: yes
+      become: yes
+    - name: Actualiza grub luego de deshabilitar biosdevname
+      command: update-grub
+      become: yes
+    - name: Instala paquetes requeridos
+      apt: 
+        name: "{{ item }}"
+        state: latest
+        update_cache: yes
+      with_items:
+        - smartmontools
+        - bridge-utils
+        - ifenslave
+        - rsync
+        - screen
+        - byobu
+        - lshw
+        - pwgen
+        - fail2ban
+        - lxc
+        - dmidecode
+        - libvirt-bin
+        - qemu-kvm
+        - vlan
+        - ansible
+        - pv
+        - strace
+        - vim
+        - wget
+        - python-pip
+        - lxc-dev
+      become: yes
+    - name: Interfaces con bonding, 4xeth de miembro, con bridge br0
+      copy:
+        dest: /etc/network/interfaces
+        src: files/interfaces-bonding-bridge
+        mode: 644
+        owner: root
+        group: root
+      become: yes
+    - name: Installs python2 modules
+      pip:
+        name: "{{ item }}"
+        executable: pip2
+        state: latest
+      with_items:
+        - lxc-python2
+      become: yes
+    - name: Starts and enable services
+      service:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+      with_items:
+        - fail2ban
+      become: yes
+    - name: Disables systemd-coredump (1/2 creates dir)
+      file: path=/etc/systemd/coredump.conf.d/ state=directory mode=0755
+      become: yes
+    - name: Disables systemd-coredump (2/2 creates conf file)
+      copy:
+        dest: /etc/systemd/coredump.conf.d/disable.conf
+        content: |
+          [Coredump]
+          Storage=none
+      become: yes
+    - name: Configura defaults de LXC
+      lineinfile:
+        regexp: "^lxc.network.link = lxcbr0"
+        dest: "/etc/lxc/default.conf"
+        line: "lxc.network.link = br0"
+        state: present
+        backrefs: yes
+      become: yes
