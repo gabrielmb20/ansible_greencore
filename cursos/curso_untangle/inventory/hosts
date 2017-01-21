@@ -1,0 +1,3 @@
+[fisicos]
+10.42.25.20 br0mac=00:16:3e:c0:40:10 br0ip=10.42.25.20 br1ip=10.0.1.250 br2ip=10.0.2.250 hostname=gcs-profe
+10.42.25.21 br0mac=00:16:3e:c0:41:10 br0ip=10.42.25.21 br1ip=10.1.1.250 br2ip=10.1.2.250 hostname=gcs-estud-01

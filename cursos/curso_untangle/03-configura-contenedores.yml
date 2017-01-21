@@ -1,0 +1,68 @@
+---
+- name: Install a full arch linux desktop
+  hosts: fisicos
+  tasks:
+    - name: Apaga todos los contenedores
+      command: "lxc-stop -n {{ item }}"
+      with_items:
+        - publicbr0
+        - internalbr1
+        - internalbr2
+      become: yes
+      ignore_errors: true
+    - name: Destruye todos los contenedores
+      command: "lxc-destroy -n {{ item }}"
+      with_items:
+        - publicbr0
+        - internalbr1
+        - internalbr2
+      become: yes
+      ignore_errors: true
+    - name: Crea contenedor de publicbr0
+      lxc_container:
+        name: publicbr0
+        container_log: true
+        container_config:
+          - lxc.network.link = br0
+          - lxc.start.auto = 1
+          - lxc.start.delay = 120
+          - lxc.start.order = 0
+          - lxc.network.hwaddr = {{ br0mac }}
+        template: download
+        state: started
+        template_options: -d ubuntu -r trusty -a amd64
+      become: yes
+    - name: Crea contenedor red interna br1
+      lxc_container:
+        name: internalbr1
+        container_log: true
+        container_config:
+          - lxc.network.link = br1
+          - lxc.start.auto = 1
+          - lxc.start.delay = 10
+          - lxc.start.order = 1
+          - lxc.network.hwaddr = {{ br1mac }}
+        template: download
+        state: started
+        template_options: -d ubuntu -r trusty -a amd64
+      become: yes    
+    - name: Crea contenedor red interna br2
+      lxc_container:
+        name: internalbr2
+        container_log: true
+        container_config:
+          - lxc.network.link = br2
+          - lxc.start.auto = 1
+          - lxc.start.delay = 10
+          - lxc.start.order = 2
+          - lxc.network.hwaddr = {{ br2mac }}
+        template: download
+        state: started
+        template_options: -d ubuntu -r trusty -a amd64
+      become: yes
+    - name: Crea configuración base para todos los contenedores
+      command: lxc-attach -n {{ item[0] }} -- {{ item[1] }}
+      with_nested:
+        - [ 'publicbr0', 'internalbr1', 'internalbr2']
+        - [ 'apt-get update', 'apt-get upgrade -qy', 'apt-get install ssh -qy', 'update-rc.d ssh enable', 'useradd -s /bin/bash -G sudo -m -p "$6$dF3C39/G$6oRDu6OCq9Td2hU1iN4lRyMTIPtTkq3bIivTAEqxUGOH6LRAkmkGcqjlLN4jT6S1buHEUmCJAqIhqnPcMKbxE1" greencore']
+      become: yes
