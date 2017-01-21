@@ -1,0 +1,32 @@
+---
+packages_base:
+  - [ 'ansible',
+    'smartmontools',
+    'bridge-utils',
+    'ifenslave',
+    'screen',
+    'rsync',
+    'byobu',
+    'pwgen',
+    'fail2ban']
+    #- smartmontools
+    #- bridge-utils
+    #- ifenslave
+    #- rsync
+    #- screen 
+    #- byobu 
+    #- lshw 
+    #- pwgen 
+    #- fail2ban 
+    #- lxc 
+    #- dmidecode 
+    #- libvirt-bin 
+    #- qemu-kvm 
+    #- vlan 
+    #- ansible
+    #- pv
+    #- strace
+    #- vim
+    #- wget
+    #- python-pip
+    #- lxc-dev

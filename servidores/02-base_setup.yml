@@ -2,6 +2,7 @@
 - name: Instala un servidor de virtualización y contenedores
   hosts: all
   tasks:
+    - include_vars: package-list.yml
     - name: Deshabilita biosdevname
       lineinfile:
         regexp: '^GRUB_CMDLINE_LINUX=""'
@@ -18,28 +19,8 @@
         name: "{{ item }}"
         state: latest
         update_cache: yes
-      with_items:
-        - smartmontools
-        - bridge-utils
-        - ifenslave
-        - rsync
-        - screen
-        - byobu
-        - lshw
-        - pwgen
-        - fail2ban
-        - lxc
-        - dmidecode
-        - libvirt-bin
-        - qemu-kvm
-        - vlan
-        - ansible
-        - pv
-        - strace
-        - vim
-        - wget
-        - python-pip
-        - lxc-dev
+      with_flattened:
+        - "{{ packages_base }}"
       become: yes
     - name: Interfaces con bonding, 4xeth de miembro, con bridge br0
       copy:
