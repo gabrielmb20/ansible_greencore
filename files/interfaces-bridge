@@ -1,0 +1,8 @@
+auto eth0
+iface eth0 inet manual
+
+auto br0
+iface br0 inet dhcp
+	bridge_ports eth0
+	dns-nameservers 10.42.30.2
+	dns-search greencore.int

@@ -1,0 +1,14 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# Notifica L-V a las 9:44p
+44 21 * * 1-5 root DISPLAY=:0.0 sudo -u greencore /usr/bin/zenity --info --text 'El equipo se apagara automáticamente en 15 minutos'
+
+# Apaga L-V a las 10:00pm
+45 21 * * 1-5 root /sbin/shutdown -h 15
+
+# Notifica S a las 4:44pm
+44 16 * * 6 root DISPLAY=:0.0 sudo -u greencore /usr/bin/zenity --info --text 'El equipo se apagara automáticamente en 15 minutos'
+
+# Apaga L-V a las 10:00pm
+45 16 * * 6 root /sbin/shutdown -h 15
