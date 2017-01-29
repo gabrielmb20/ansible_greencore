@@ -101,7 +101,11 @@
       owner: root
       group: root
     become: yes
-# TODO
-### Obtener dirección IP y nombre de host por parte del servidor de DHCP (FOG)
-##echo unset old_host_name > /etc/dhcp/dhclient-enter-hooks.d/unset_old_hostname
-##> /etc/hostname
+  - name: Fog DHCP Hostname
+    copy:
+      dest: /etc/dhcp/dhclient-enter-hooks.d/unset_old_hostname
+      content: "unset old_host_name"
+      mode: 0644
+      owner: root
+      group: root
+    become: yes
