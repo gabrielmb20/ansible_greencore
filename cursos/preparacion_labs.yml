@@ -31,6 +31,8 @@
       name: deja-dup
       state: absent
     become: yes
+    with_items:
+      - modem_manager
   - name: Instala paquetes requeridos por los instructores
     apt:
       name: "{{ item }}"
@@ -101,10 +103,18 @@
       owner: root
       group: root
     become: yes
-  - name: Fog DHCP Hostname
+  - name: Fog DHCP Hostname en dhclient hooks
     copy:
       dest: /etc/dhcp/dhclient-enter-hooks.d/unset_old_hostname
       content: "unset old_host_name"
+      mode: 0644
+      owner: root
+      group: root
+    become: yes
+  - name: Fog DHCP Hostname en /etc/hostname
+    copy:
+      dest: /etc/hostname
+      src: /dev/null
       mode: 0644
       owner: root
       group: root
