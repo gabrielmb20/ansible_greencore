@@ -18,5 +18,5 @@ Necesario:
 ```
 $ git clone https://github.com/fede2cr/ansible_greencore.git
 $ cd ansible_greencore
-$ ansible-playbook -i inventory/hosts.example-labs cursos/preparacion_labs.yml -K
+$ ansible-playbook -i inventory/hosts.example-lab cursos/preparacion_labs.yml -K
 ```

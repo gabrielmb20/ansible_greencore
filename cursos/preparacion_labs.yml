@@ -28,11 +28,12 @@
     become: yes
   - name: Remueve paqute deja-dup
     apt:
-      name: deja-dup
+      name: "{{ item }}"
       state: absent
     become: yes
     with_items:
       - modem_manager
+      - deja-dup
   - name: Instala paquetes requeridos por los instructores
     apt:
       name: "{{ item }}"
@@ -82,7 +83,7 @@
   - name: Interfaces con bridge br0
     copy:
       dest: /etc/network/interfaces
-      src: files/interfaces-bridge
+      src: ../files/interfaces-bridge
       mode: 0644
       owner: root
       group: root
@@ -90,7 +91,7 @@
   - name: Instala tarea programada para apagado automático de equipos
     copy:
       dest: /etc/cron.d/shutdown
-      src: files/cron-shutdown
+      src: ../files/cron-shutdown
       mode: 0644
       owner: root
       group: root
@@ -98,7 +99,7 @@
   - name: Instala script turn-on.sh como interface de wakeonlan
     copy:
       dest: /usr/local/bin/turn-on.sh
-      src: files/turn-on.sh
+      src: ../files/turn-on.sh
       mode: 0755
       owner: root
       group: root

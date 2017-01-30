@@ -1,6 +1,6 @@
 # ansible_greencore [![Build Status](https://travis-ci.org/fede2cr/ansible_greencore.svg?branch=master)](https://travis-ci.org/fede2cr/ansible_greencore)
 
-Recetas de ansible para cosas que hago en Greencore Solutions
+Recetas de ansible para cosas que hacemos en Greencore Solutions
 
 ## Cursos
 - curso_untangle: Incluye recetas para instalar un ambiente de un equipo virtual, dos contenedores, y red necesaria para impartir un curso de la plataforma Untangle. No incluye contenido del curso, solo preparación.
