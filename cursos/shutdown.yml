@@ -1,0 +1,8 @@
+---
+- name: Apaga los equipos de las aulas de forma manual
+  hosts: all
+  tasks:
+  - name: Ejecuta el comando shutdown
+    command: systemctl poweroff
+    become: yes
+    ignore_errors: true
