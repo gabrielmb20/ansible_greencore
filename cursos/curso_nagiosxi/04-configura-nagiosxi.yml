@@ -10,9 +10,14 @@
         group: "{{ ansible_user }}"
         remote_src: yes
       become: yes
-    - name: Crea configuración base para todos los contenedores
-      command: lxc-attach -n {{ item[0] }} -- {{ item[1] }}
-      with_nested:
-        - [ 'nagiosxi', 'servicios1', 'servicios2']
-        - [ 'yum update -y', 'yum install openssh-server -y', 'systemctl enable sshd', 'systemctl start sshd', 'useradd -s /bin/bash -G wheel -m -p "$6$dF3C39/G$6oRDu6OCq9Td2hU1iN4lRyMTIPtTkq3bIivTAEqxUGOH6LRAkmkGcqjlLN4jT6S1buHEUmCJAqIhqnPcMKbxE1" greencore']
+    - name: Mueve sysctl para arreglar problema de nagiosxi en contenedores
+      command: mv /sbin/sysctl /root
+      become: yes
+    - name: Agrega liga a sysctl
+      command: ln -s /bin/true /sbin/sysctl
+      become: yes
+    - name: Ejecuta instalador de nagiosxi
+      command: ./fullinstall -n
+      args:
+        chdir: /home/greencore/nagiosxi/
       become: yes

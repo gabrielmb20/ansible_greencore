@@ -42,3 +42,19 @@
         state: present
         backrefs: yes
       become: yes
+    - name: Crea directorio para cliente de SSH
+      file:
+        path: "{{ ansible_env.HOME }}/.ssh/"
+        state: directory
+        mode: 0755
+        owner: greencore
+        group: greencore
+    - name: Configura cliente de SSH
+      copy:
+        dest: "{{ ansible_env.HOME }}/.ssh/config"
+        content: |
+                Host 10.42.25.*
+                  StrictHostKeyChecking no
+                  UserKnownHostsFile=/dev/null
+        owner: greencore
+        group: greencore

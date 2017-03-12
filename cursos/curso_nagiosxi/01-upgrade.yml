@@ -1,6 +1,6 @@
 ---
 - name: Actualiza los equipos virtuales como preparación de examen
-  hosts: all
+  hosts: fisicos
   tasks:
     - name: Instala aptitude (requerido por ansible)
       apt:

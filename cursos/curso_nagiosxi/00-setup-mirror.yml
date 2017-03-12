@@ -1,6 +1,6 @@
 ---
 - name: Configuramos mirror local, para equipos en Greencore Solutions
-  hosts: all
+  hosts: fisicos
   tasks:
     - name: Cambia cr.archive por ubuntu-mirror
       replace: >
