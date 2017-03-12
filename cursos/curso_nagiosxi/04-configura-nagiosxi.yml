@@ -14,7 +14,10 @@
       command: mv /sbin/sysctl /root
       become: yes
     - name: Agrega liga a sysctl
-      command: ln -s /bin/true /sbin/sysctl
+      file:
+        state: link
+        src: /bin/true
+        dest: /sbin/sysctl
       become: yes
     - name: Ejecuta instalador de nagiosxi
       command: ./fullinstall -n
