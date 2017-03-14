@@ -1,0 +1,67 @@
+---
+- name: Configura servicios a monitorear
+  hosts: srv
+  tasks:
+    - name: Instala paquetes requeridos
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - httpd
+        - vsftpd
+        - dnsmasq
+        - net-snmp
+        - net-snmp-utils
+        - less
+        - vim
+        - postgresql-server
+        - mariadb-server
+        - freeradius
+        - postfix
+      become: yes
+    - name: Crea configuración de snmpd
+      copy:
+        dest: /etc/snmp/snmpd.conf
+        content: |
+                agentAddress udp:161
+                rocommunity public
+        owner: root
+        group: root
+        mode: 644
+      become: yes
+    - name: Inicia configuración de PostgreSQL
+      command: postgresql-setup initdb
+      become: yes
+      ignore_errors: true
+    - name: Habilita PostgreSQL en todas las interfaces
+      lineinfile:
+        regexp: "^#listen_addresses = 'localhost'"
+        dest: "/var/lib/pgsql/data/postgresql.conf"
+        line: "listen_addresses = '*'"
+        state: present
+        backrefs: yes
+      become: yes
+    - name: Habilita servicios
+      service:
+        name: "{{ item }}"
+        state: restarted
+        enabled: yes
+      with_items:
+        - httpd
+        - vsftpd
+        - dnsmasq
+        - snmpd
+        - postgresql
+        - mariadb
+        - radiusd
+        - postfix
+      become: yes
+    - name: Copia agente NRPE
+      unarchive:
+        dest: /home/greencore/
+        src: https://assets.nagios.com/downloads/nagiosxi/agents/linux-nrpe-agent.tar.gz
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        remote_src: yes
+      become: yes
+

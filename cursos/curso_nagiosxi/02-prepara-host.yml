@@ -1,5 +1,5 @@
 ---
-- name: Install a full arch linux desktop
+- name: Instala laboratorio para clases de nagios
   hosts: fisicos
   tasks:
     - name: Plantilla de jinja para archivo interfaces
