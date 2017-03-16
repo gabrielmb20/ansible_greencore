@@ -1,0 +1,19 @@
+---
+- name: Preinstala Nagiox XI (viejo)
+  hosts: examen
+  strategy: free
+  tasks:
+    - name: Mueve sysctl para arreglar problema de nagiosxi en contenedores
+      command: mv /sbin/sysctl /root
+      become: yes
+    - name: Agrega liga a sysctl
+      file:
+        state: link
+        src: /bin/true
+        dest: /sbin/sysctl
+      become: yes
+    - name: Ejecuta instalador de nagiosxi
+      command: ./fullinstall -n
+      args:
+        chdir: /home/greencore/nagiosxi/
+      become: yes
