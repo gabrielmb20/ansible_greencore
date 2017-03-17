@@ -60,6 +60,7 @@
       - vlc
       - mpv
       - wakeonlan
+    become: yes
   - name: Deshabilita biosdevname
     lineinfile:
       regexp: '^GRUB_CMDLINE_LINUX=""'
@@ -118,8 +119,15 @@
   - name: Fog DHCP Hostname en /etc/hostname
     copy:
       dest: /etc/hostname
-      src: /dev/null
+      content: ""
       mode: 0644
       owner: root
       group: root
+    become: yes
+    ignore_errors: true
+  - user:
+      name: greencore
+      shell: /bin/bash
+      groups: sudo,dialout,libvirt,adm
+      append: yes
     become: yes
