@@ -62,7 +62,7 @@
         src: https://assets.nagios.com/downloads/nagiosxi/agents/linux-nrpe-agent.tar.gz
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
-        mode: 0644
+        mode: 0755
         remote_src: yes
       become: yes
 
