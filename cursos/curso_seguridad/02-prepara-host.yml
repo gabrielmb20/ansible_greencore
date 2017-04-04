@@ -30,6 +30,7 @@
         - lxc
         - lxc-dev
         - python-pip
+        - libguestfs-tools
       become: yes
     - name: Instala dependencias de python para módulo de ansible de LXC
       pip: name=lxc-python2 state=present

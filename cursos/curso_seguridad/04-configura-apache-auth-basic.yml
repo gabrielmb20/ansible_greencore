@@ -1,0 +1,50 @@
+---
+- name: Configura servicios a monitorear
+  hosts: inseguro
+  tasks:
+    - name: Instala paquetes requeridos
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - httpd
+        - vim
+        - nano
+        - less
+      become: yes
+    - name: Copia config de apache de htpasswd
+      copy:
+        dest: /etc/httpd/conf.d/greencore.conf
+        content: |
+                <VirtualHost *:80>
+                <Location />
+                    Deny from all
+                    AuthUserFile /var/www/html/.htpasswd
+                    AuthName "Restricted Area"
+                    AuthType Basic
+                    Satisfy Any
+                    require valid-user
+                </Location>
+                </VirtualHost>
+        owner: root
+        group: root
+      become: yes
+    - name: Copia web de ejemplo
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+                greencore
+        owner: root
+        group: root
+      become: yes
+    - name: Crea htpasswd
+      command: htpasswd -bc /var/www/html/.htpasswd greencore greencore
+      become: yes
+    - name: Habilita servicios
+      service:
+        name: "{{ item }}"
+        state: restarted
+        enabled: yes
+      with_items:
+        - httpd
+      become: yes
