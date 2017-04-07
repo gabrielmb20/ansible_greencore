@@ -12,16 +12,24 @@ Algunas características del servidor final:
 
 ## Instrucciones:
 
-```
+- Descargue las recetas de software, y entre al directorio específico para servidores
+
+```bash
 $ sudo apt-get install ansible git
-$ git clone git@github.com:fede2cr/ansible_recipes.git
-$ cd ansible_recipes/greencore_common
-## Opcional, solo se encuentra dentro de Greencore
+$ git clone git@github.com:fede2cr/ansible_greencore.git
+$ cd ansible_greencore/servidores
+```
+- Use como base los archivos en ../inventory/ para definir las direcciones de los equipos a administrar.
+- Opcional: solo se encuentra dentro de Greencore. Realice un cambio para que se use el mirror local de Ubuntu/CentOS
+
+```bash
 $ ansible-playbook -i ../inventory/hosts.example -K 00-setup-mirror.yml
-## Actualiza luego de instalación 
+```
+- Actualice los paquetes del equipo. Si usa paquetes de python, puede crear una regla similar para que mantenga actualizados los paquetes vía pip.
+```bash
 $ ansible-playbook -i ../inventory/hosts.example -K 01-upgrade.yml
-## Instala paquetes requeridos y configuración inicial
+```
+- Instale paquetes base, y configuración inicial. Esto se definió para un servidor ejemplo, pero se recomienda crear recetas pra servidores específicos.
+```bash
 $ ansible-playbook -i ../inventory/hosts.example -K 02-base_setup.yml
 ```
-
-Para consultas favor escribir a a alvaro@greencore.co.cr o soporte@greencore.co.cr
