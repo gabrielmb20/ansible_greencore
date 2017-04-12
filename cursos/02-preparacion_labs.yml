@@ -2,65 +2,6 @@
 - name: Instala la base para los equipos de los laboratorios de Greencore Solutions
   hosts: fisicos
   tasks:
-  - name: Cambia cr.archive por ubuntu-mirror
-    replace: >
-      regexp="deb http:\/\/cr.archive.ubuntu.com"
-      replace="deb http://ubuntu-mirror.greencore.int"
-      dest=/etc/apt/sources.list
-    become: yes
-  - name: Elimina lineas que referencien a backports
-    lineinfile: >
-      regexp="-backports"
-      dest=/etc/apt/sources.list
-      state=absent
-    become: yes
-  - name: Instala aptitude (requerido por ansible)
-    apt:
-      name: aptitude
-      state: latest
-      update_cache: yes
-    become: yes
-  - name: Actualiza cache, paquetes, y autoremueve
-    apt:
-      upgrade: dist
-      update_cache: yes
-      autoremove: yes
-    become: yes
-  - name: Remueve paqute deja-dup
-    apt:
-      name: "{{ item }}"
-      state: absent
-    become: yes
-    with_items:
-      - modem_manager
-      - deja-dup
-  - name: Instala paquetes requeridos por los instructores
-    apt:
-      name: "{{ item }}"
-      state: present
-    with_items:
-      - vim
-      - virt-manager
-      - virtualbox
-      - fritzing
-      - bridge-utils
-      - qemu-kvm
-      - qemu-system
-      - libvirt-bin
-      - ubuntu-vm-builder
-      - pwgen
-      - gnome-shell
-      - gnome-tweak-tool
-      - chromium-browser
-      - screen
-      - byobu
-      - openssh-server
-      - dia
-      - shutter
-      - vlc
-      - mpv
-      - wakeonlan
-    become: yes
   - name: Deshabilita biosdevname
     lineinfile:
       regexp: '^GRUB_CMDLINE_LINUX=""'
@@ -71,7 +12,6 @@
     become: yes
     register: grub_default_biosdevname
   - name: Actualiza grub luego de deshabilitar biosdevname
-    #command: update-grub
     command: grub-mkconfig -o /boot/grub/grub.cfg
     ignore_errors: true
     become: yes

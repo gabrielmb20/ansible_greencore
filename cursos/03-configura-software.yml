@@ -1,0 +1,39 @@
+---
+- name: Instala la base para los equipos de los laboratorios de Greencore Solutions
+  hosts: fisicos
+  tasks:
+  - name: Remueve paqute deja-dup
+    apt:
+      name: "{{ item }}"
+      state: absent
+    become: yes
+    with_items:
+      - modem_manager
+      - deja-dup
+  - name: Instala paquetes requeridos por los instructores
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - vim
+      - virt-manager
+      - virtualbox
+      - fritzing
+      - bridge-utils
+      - qemu-kvm
+      - qemu-system
+      - libvirt-bin
+      - ubuntu-vm-builder
+      - pwgen
+      - gnome-shell
+      - gnome-tweak-tool
+      - chromium-browser
+      - screen
+      - byobu
+      - openssh-server
+      - dia
+      - shutter
+      - vlc
+      - mpv
+      - wakeonlan
+    become: yes
