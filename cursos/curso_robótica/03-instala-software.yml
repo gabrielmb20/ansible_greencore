@@ -1,0 +1,99 @@
+---
+- name: Instala laboratorio para clases de robotica
+  hosts: fisicos
+  tasks:
+    - name: Instala pip3
+      apt:
+        name: python3-pip
+        state: installed
+      become: yes
+    - name: Instala esptool con pip
+      pip:
+        name: esptool 
+        state: present
+        executable: pip3
+      become: yes
+    - name: Instala ampy con pip
+      pip:
+        name: adafruit-ampy 
+        state: present
+        executable: pip3
+      become: yes
+    - name: Remueve paqute deja-dup
+      apt:
+        name: "{{ item }}"
+        state: absent
+      become: yes
+      with_items:
+        - modem_manager
+        - deja-dup
+    - name: Instala paquetes requeridos por los instructores
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - vim
+        - virt-manager
+        - virtualbox
+        - fritzing
+        - bridge-utils
+        - qemu-kvm
+        - qemu-system
+        - libvirt-bin
+        - ubuntu-vm-builder
+        - pwgen
+        - gnome-shell
+        - gnome-tweak-tool
+        - chromium-browser
+        - screen
+        - byobu
+        - openssh-server
+        - dia
+        - shutter
+        - vlc
+        - mpv
+        - wakeonlan
+      become: yes
+    - name: Elimina liga de arduino
+      file:
+        state: link
+        src: /usr/local/arduino-1.8.2/arduino
+        dest: /usr/bin/arduino
+        force: yes
+      become: yes
+    - name: Elimina config de arduino (.arduino15/) en usuario
+      file:
+        state: absent
+        dest: "{{ ansible_env.HOME }}/.arduino15"
+        force: yes
+      become: yes
+    - name: Elimina config de arduino (Arduino/) en usuario
+      file:
+        state: absent
+        dest: "{{ ansible_env.HOME }}/Arduino"
+        force: yes
+      become: yes
+    - name: Descarga CircuitPython para ESP8266 Feather
+      get_url:
+        url: https://github.com/adafruit/circuitpython/releases/download/0.9.5/adafruit-circuitpython-feather_huzzah-0.9.5.bin 
+        dest: "{{ ansible_env.HOME }}/"
+    - name: Copia instalador de arduino
+      unarchive:
+        dest: /usr/local/
+        src: https://downloads.arduino.cc/arduino-1.8.2-linux64.tar.xz
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        remote_src: yes
+      become: yes
+    - name: Instala librerías de Arduino
+      command: arduino --install-library "Adafruit SleepyDog Library"
+    - name: Configura tarjetas adicionales para Arduino
+      command: arduino --pref boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json,http://static.dev.sifive.com/bsp/arduino/package_sifive_index.json,https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,https://lowpowerlab.github.io/MoteinoCore/package_LowPowerLab_index.json --save-prefs
+    - name: Instala placas adicionales en Arduino
+      command: arduino --install-boards "{{ item }}"
+      with_items:
+        - esp8266:esp8266
+        - adafruit:avr
+        - arduino:samd
+        - adafruit:samd
+        - sifive:riscv
