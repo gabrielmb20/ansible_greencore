@@ -36,4 +36,5 @@
       - vlc
       - mpv
       - wakeonlan
+      - git
     become: yes
