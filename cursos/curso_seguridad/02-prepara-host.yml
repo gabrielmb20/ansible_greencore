@@ -59,3 +59,13 @@
                   UserKnownHostsFile=/dev/null
         owner: greencore
         group: greencore
+    - name: Crea reglas de ACL para trabajar en directorio de virtuales
+      acl:
+        path: /var/lib/libvirt/images/
+        entity: greencore
+        etype: user
+        permissions: rwX
+        state: present
+        recursive: yes
+      become: yes
+
