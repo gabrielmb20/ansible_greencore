@@ -58,7 +58,6 @@
       file:
         path: /usr/local/bin/arduino-1.6.13/
         state: absent
-        #        recurse: yes
       become: yes
     - name: Crea liga de arduino
       file:
@@ -81,7 +80,7 @@
       become: yes
     - name: Descarga CircuitPython para ESP8266 Feather
       get_url:
-        url: https://github.com/adafruit/circuitpython/releases/download/0.9.5/adafruit-circuitpython-feather_huzzah-0.9.5.bin 
+        url: https://github.com/adafruit/circuitpython/releases/download/0.9.5/adafruit-circuitpython-feather_huzzah-0.9.6.bin 
         dest: "{{ ansible_env.HOME }}/"
     - name: Copia instalador de arduino
       unarchive:
