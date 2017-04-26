@@ -1,8 +1,18 @@
 ---
-- name: Configura servicios a monitorear
+- name: Instala la máquina virtual de Kali
   hosts: fisicos
   tasks:
-    - name: Plantilla de jinja para archivo interfaces
+    - name: Crea reglas de ACL para directorio de libvirt
+      acl:
+        path: /var/lib/libvirt/images
+        entity: "{{ ansible_user }}"
+        etype: user
+        permissions: rwX
+        state: present
+        recursive: yes
+        default: yes
+      become: yes
+    - name: Plantilla de jinja para XML de VM de Kali
       template:
         src: files/kali.xml.j2
         dest: /tmp/kali.xml
@@ -10,4 +20,11 @@
         owner: root
         group: root
       become: yes
-
+    - name: Mueve imagen de kali a directorio de imagenes
+      synchronize:
+        src: /home/greencore/kali.qcow2
+        dest: /var/lib/libvirt/images/
+      ignore_errors: true
+    - name: Importa archivo XML para VM de Kali
+      command: virsh define /tmp/kali.xml
+      become: yes

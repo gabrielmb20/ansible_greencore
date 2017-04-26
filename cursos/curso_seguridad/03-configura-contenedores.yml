@@ -1,5 +1,5 @@
 ---
-- name: Install a full arch linux desktop
+- name: Crea contenedores necesarios para el curso
   hosts: fisicos
   tasks:
     - name: Apaga todos los contenedores
@@ -28,6 +28,9 @@
         state: started
         template_options: -d centos -r 7 -a amd64
       become: yes
+    - name: Pausa por error de yum
+      pause:
+        seconds: 30
     - name: Crea configuración base para todos los contenedores
       command: lxc-attach -n {{ item[0] }} -- {{ item[1] }}
       with_nested:
