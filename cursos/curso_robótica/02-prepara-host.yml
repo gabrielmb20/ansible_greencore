@@ -1,6 +1,7 @@
 ---
 - name: Instala laboratorio para clases de nagios
   hosts: fisicos
+  strategy: free
   tasks:
     - name: Plantilla de jinja para archivo interfaces
       template:

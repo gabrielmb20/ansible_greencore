@@ -1,6 +1,7 @@
 ---
 - name: Instala laboratorio para clases de robotica
   hosts: fisicos
+  strategy: free
   tasks:
     - name: Instala pip3
       apt:
@@ -80,7 +81,7 @@
       become: yes
     - name: Descarga CircuitPython para ESP8266 Feather
       get_url:
-        url: https://github.com/adafruit/circuitpython/releases/download/0.9.5/adafruit-circuitpython-feather_huzzah-0.9.6.bin 
+        url: https://github.com/adafruit/circuitpython/releases/download/0.9.6/adafruit-circuitpython-feather_huzzah-0.9.6.bin 
         dest: "{{ ansible_env.HOME }}/"
     - name: Copia instalador de arduino
       unarchive:
