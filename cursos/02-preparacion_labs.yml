@@ -1,6 +1,7 @@
 ---
 - name: Instala la base para los equipos de los laboratorios de Greencore Solutions
   hosts: fisicos
+  strategy: free
   tasks:
   - name: Deshabilita biosdevname
     lineinfile:
@@ -16,6 +17,14 @@
     ignore_errors: true
     become: yes
     when: grub_default_biosdevname.changed
+  - name: Plantilla de jinja para archivo interfaces
+      template:
+        src: files/interfaces.j2
+        dest: /etc/network/interfaces
+        mode: 0644
+        owner: root
+        group: root
+      become: yes
   - name: Configura Chromium Browser en modo Incognito
     lineinfile:
       regexp: '^CHROMIUM_FLAGS=""'
@@ -23,14 +32,6 @@
       line: 'CHROMIUM_FLAGS="-incognito"'
       state: present
       backrefs: yes
-    become: yes
-  - name: Interfaces con bridge br0
-    copy:
-      dest: /etc/network/interfaces
-      src: ../files/interfaces-bridge
-      mode: 0644
-      owner: root
-      group: root
     become: yes
   - name: Instala tarea programada para apagado automático de equipos
     copy:
@@ -65,9 +66,56 @@
       group: root
     become: yes
     ignore_errors: true
-  - user:
+  - name: Crea usuario greencore con grupos necesarios
+    user:
       name: greencore
       shell: /bin/bash
       groups: sudo,dialout,libvirt,adm
       append: yes
     become: yes
+  - name: Configura kernel para que funcione como router
+    sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      sysctl_set: yes
+      state: present
+      reload: yes
+    become: yes
+  - name: Instala paquetes requeridos para esta receta
+    apt: 
+      name: "{{ item }}"
+      state: installed
+    with_items:
+      - lxc
+      - lxc-dev
+      - python-pip
+      - libvirt-bin
+      - chromium-browser
+    become: yes
+  - name: Instala dependencias de python para módulo de ansible de LXC
+    pip: name=lxc-python2 state=present
+    become: yes
+  - name: Configura defaults de LXC
+    lineinfile:
+      regexp: "^lxc.network.link = lxcbr0"
+      dest: "/etc/lxc/default.conf"
+      line: "lxc.network.link = br0"
+      state: present
+      backrefs: yes
+    become: yes
+  - name: Crea directorio para cliente de SSH
+    file:
+      path: "{{ ansible_env.HOME }}/.ssh/"
+      state: directory
+      mode: 0755
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+  - name: Configura cliente de SSH
+    copy:
+      dest: "{{ ansible_env.HOME }}/.ssh/config"
+      content: |
+              Host 10.42.25.*
+                StrictHostKeyChecking no
+                UserKnownHostsFile=/dev/null
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
