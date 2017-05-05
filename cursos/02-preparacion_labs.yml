@@ -18,13 +18,13 @@
     become: yes
     when: grub_default_biosdevname.changed
   - name: Plantilla de jinja para archivo interfaces
-      template:
-        src: files/interfaces.j2
-        dest: /etc/network/interfaces
-        mode: 0644
-        owner: root
-        group: root
-      become: yes
+    template:
+      src: files/interfaces.j2
+      dest: /etc/network/interfaces
+      mode: 0644
+      owner: root
+      group: root
+    become: yes
   - name: Configura Chromium Browser en modo Incognito
     lineinfile:
       regexp: '^CHROMIUM_FLAGS=""'
