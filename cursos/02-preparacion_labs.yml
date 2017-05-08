@@ -36,7 +36,7 @@
   - name: Instala tarea programada para apagado automático de equipos
     copy:
       dest: /etc/cron.d/shutdown
-      src: ../files/cron-shutdown
+      src: files/cron-shutdown
       mode: 0644
       owner: root
       group: root
@@ -44,7 +44,7 @@
   - name: Instala script turn-on.sh como interface de wakeonlan
     copy:
       dest: /usr/local/bin/turn-on.sh
-      src: ../files/turn-on.sh
+      src: files/turn-on.sh
       mode: 0755
       owner: root
       group: root
@@ -57,15 +57,10 @@
       owner: root
       group: root
     become: yes
-  - name: Fog DHCP Hostname en /etc/hostname
-    copy:
-      dest: /etc/hostname
-      content: ""
-      mode: 0644
-      owner: root
-      group: root
+  - name: Define un hostname para equipo fisico
+    hostname:
+      name: "{{ hostname }}"
     become: yes
-    ignore_errors: true
   - name: Crea usuario greencore con grupos necesarios
     user:
       name: greencore
@@ -91,6 +86,7 @@
       - python-pip
       - libvirt-bin
       - chromium-browser
+      - libguestfs-tools
     become: yes
   - name: Instala dependencias de python para módulo de ansible de LXC
     pip: name=lxc-python2 state=present
@@ -119,3 +115,12 @@
                 UserKnownHostsFile=/dev/null
       owner: "{{ ansible_user }}"
       group: "{{ ansible_user }}"
+  - name: Crea reglas de ACL para trabajar en directorio de virtuales
+    acl:
+      path: /var/lib/libvirt/images/
+      entity: "{{ ansible_user }}"
+      etype: user
+      permissions: rwX
+      state: present
+      recursive: yes
+    become: yes
