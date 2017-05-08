@@ -8,7 +8,7 @@
       state: absent
     become: yes
     with_items:
-      - modem_manager
+      - modemmanager
       - deja-dup
   - name: Instala paquetes requeridos por los instructores
     apt:
