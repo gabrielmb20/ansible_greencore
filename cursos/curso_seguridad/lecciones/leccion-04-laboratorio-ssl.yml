@@ -1,0 +1,8 @@
+---
+- name: Copia instalador de Firefox nightly, para laboratorio de SSL
+  hosts: fisicos
+  tasks:
+    - name: Copia instalador de Firefox nightly
+      unarchive:
+        src:  files/firefox-55.0a1.en-US.linux-x86_64.tar.bz2
+        dest: "{{ ansible_env.HOME }}/"

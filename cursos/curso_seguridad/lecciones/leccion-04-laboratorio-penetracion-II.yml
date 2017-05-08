@@ -1,0 +1,24 @@
+---
+- name: Configura servicios a monitorear
+  hosts: inseguro
+  tasks:
+    - name: Instala paquetes requeridos
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - cyrus-imapd
+        - postfix
+      become: yes
+    - name: Habilita servicios
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      with_items:
+        - cyrus-imapd.service
+        - postfix.service
+      become: yes
+    - name: Cambia clave de root
+      command: usermod -p '$6$d7hx18ts$/Gt9pbMeUa3lbVUoZu4qcjsHrrIspQge5/yvC8p91jhbgYbx1puQMRH80gzpabGCe7heqkiPRD/nzTwW9J20o0' root
+      become: yes
