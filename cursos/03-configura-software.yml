@@ -37,4 +37,5 @@
       - mpv
       - wakeonlan
       - git
+      - asciinema
     become: yes
