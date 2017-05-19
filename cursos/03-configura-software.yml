@@ -41,7 +41,6 @@
   - name: Instala asciinema con pip
       pip:
         name: asciinema
-        state: present
+        state: latest
         executable: pip3
       become: yes
-
