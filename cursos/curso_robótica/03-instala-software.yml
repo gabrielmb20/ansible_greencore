@@ -11,13 +11,13 @@
     - name: Instala esptool con pip
       pip:
         name: esptool 
-        state: present
+        state: latest
         executable: pip3
       become: yes
     - name: Instala ampy con pip
       pip:
         name: adafruit-ampy 
-        state: present
+        state: latest
         executable: pip3
       become: yes
     - name: Remueve paquetes no necesarios o en conflicto de recursos
@@ -81,7 +81,7 @@
       become: yes
     - name: Descarga CircuitPython para ESP8266 Feather
       get_url:
-        url: https://github.com/adafruit/circuitpython/releases/download/0.10.0/adafruit-circuitpython-feather_huzzah-0.10.0.bin 
+        url: https://github.com/adafruit/circuitpython/releases/download/0.10.1/adafruit-circuitpython-feather_huzzah-0.10.1.bin
         dest: "{{ ansible_env.HOME }}/"
     - name: Copia instalador de arduino
       unarchive:
