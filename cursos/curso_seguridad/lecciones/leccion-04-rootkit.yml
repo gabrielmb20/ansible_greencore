@@ -1,0 +1,19 @@
+---
+- name: Instala la máquina virtual de Kali
+  hosts: fisicos
+  tasks:
+    - name: Plantilla de jinja para XML de VM de Kali
+      template:
+        src: files/rootkit.xml.j2
+        dest: /tmp/rootkit.xml
+        mode: 0644
+        owner: root
+        group: root
+      become: yes
+    - name: Importa archivo XML para VM de Rootkit
+      command: virsh define /tmp/rootkit.xml
+      become: yes
+    - name: Mueve imagen de kali a directorio de imagenes
+      synchronize:
+        src: /tmp/rootkit.qcow2
+        dest: /var/lib/libvirt/images/
