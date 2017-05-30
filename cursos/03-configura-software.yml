@@ -37,10 +37,11 @@
       - mpv
       - wakeonlan
       - git
+      - python3-pip
     become: yes
   - name: Instala asciinema con pip
-      pip:
-        name: asciinema
-        state: latest
-        executable: pip3
-      become: yes
+    pip:
+      name: asciinema
+      state: latest
+      executable: pip3
+    become: yes
