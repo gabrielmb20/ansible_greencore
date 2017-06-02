@@ -1,9 +1,11 @@
 ---
-- name: Instala la base para los equipos de los laboratorios de Greencore Solutions
+- name: Preinstala la base de Kali Linux para Raspberry Pi
   hosts: pi
   tasks:
   - debug:
-      msg: "Necesita ejecuta raspi-config y expandir el sistema de archivos primero"
+      msg: "Necesita expandir la partición antes de correr esta receta"
+  - name: Define multi-user.target como default en systemd
+    command: systemctl set-default multi-user.target
   - name: Instala aptitude (requerido por ansible)
     apt:
       name: aptitude
@@ -36,6 +38,18 @@
       - flex
       - bison
       - libgmp3-dev
+      - tcpdump
+      - sparta
+      - crunch
+      - nikto
+      - netcat
+      - bsdgames
+      - rkhunter
+      - steghide
+      - testdisk
+      - wipe
+      - zaproxy
+      - openjdk-8-jre-headless
   - name: Habilita anuncio de workstation en avahi
     lineinfile:
       regexp: '^publish-workstation=no'
@@ -60,6 +74,7 @@
       - pip
       - jupyter
       - bash_kernel
+      - droopescan
   - name: Ejecuta python3 -m bash_kernel.install
     command: python3 -m bash_kernel.install
   - name: Genera config de jupyter
