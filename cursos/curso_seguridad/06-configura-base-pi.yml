@@ -4,6 +4,11 @@
   tasks:
   - debug:
       msg: "Necesita expandir la partición antes de correr esta receta"
+  - name: Elimina bash_history de root
+    file:
+      path: /root/.bash_history
+      state: absent
+    ignore_errors: true
   - name: Define multi-user.target como default en systemd
     command: systemctl set-default multi-user.target
   - name: Instala aptitude (requerido por ansible)
@@ -11,6 +16,17 @@
       name: aptitude
       state: latest
       update_cache: yes
+  - name: Instala paquetes requeridos por los instructores
+    apt:
+      name: "{{ item }}"
+      state: absent
+    with_items:
+      - modemmanager
+      - network-manager
+      - xfwm4
+      - xfce4
+      - thunar
+      - lightdm
   - name: Actualiza cache, paquetes, y autoremueve
     apt:
       upgrade: dist
@@ -88,5 +104,7 @@
       state: present
   - name: Activa módulos de jupyter
     command: jupyter nbextension enable --py --sys-prefix widgetsnbextension
+  - name: Cambia contraseña de root a "greencore"
+    command: usermod -p '$6$k8ckuEU6deyRYdcu$RtX9ZpHNezlcjGV2v4R3UarQt4GbY92av6O9gzI6hWaYZhySRlA/60NlWL7/NByHCH/enCT.f9TPIzBuBRBP/1' root
   - name: Prepara sistema de openvas
     command: openvas-setup
