@@ -73,11 +73,18 @@
       line: 'publish-workstation=yes'
       state: present
       backrefs: yes
+  - name: Habilita anuncio de IP en avahi
+    lineinfile:
+      regexp: '^#publish-addresses=yes'
+      dest: "/etc/avahi/avahi-daemon.conf"
+      line: 'publish-addresses=yes'
+      state: present
+      backrefs: yes
   - name: Starts and enable services
     service:
       name: "{{ item }}"
       enabled: yes
-      state: started
+      state: restarted
     with_items:
       - avahi-daemon.service
   - name: Instala paquetes con pip3
