@@ -1,0 +1,17 @@
+[all:vars]
+ansible_user=greencore
+ansible_python_interpreter=/usr/bin/python2
+
+[fisicos]
+10.42.25.20 br0ip=10.42.25.20 hostname=gcs-profe
+10.42.25.21 br0ip=10.42.25.21 hostname=gcs-aula03-01
+10.42.25.22 br0ip=10.42.25.22 hostname=gcs-aula03-02
+10.42.25.23 br0ip=10.42.25.23 hostname=gcs-aula03-03
+10.42.25.24 br0ip=10.42.25.24 hostname=gcs-aula03-04
+10.42.25.25 br0ip=10.42.25.25 hostname=gcs-aula03-05
+10.42.25.26 br0ip=10.42.25.26 hostname=gcs-aula03-06
+10.42.25.27 br0ip=10.42.25.27 hostname=gcs-aula03-07
+10.42.25.28 br0ip=10.42.25.28 hostname=gcs-aula03-08
+10.42.25.29 br0ip=10.42.25.29 hostname=gcs-aula03-09
+
+
