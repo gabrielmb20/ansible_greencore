@@ -38,6 +38,7 @@
       - wakeonlan
       - git
       - python3-pip
+      - avahi-discover
     become: yes
   - name: Instala asciinema con pip
     pip:
