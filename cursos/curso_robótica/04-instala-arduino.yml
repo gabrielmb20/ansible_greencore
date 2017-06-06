@@ -63,7 +63,7 @@
     - name: Crea liga de arduino
       file:
         state: link
-        src: /usr/local/arduino-1.8.2/arduino
+        src: /usr/local/arduino-1.8.3/arduino
         dest: /usr/bin/arduino
         force: yes
       become: yes
