@@ -9,10 +9,16 @@
         state: latest
         update_cache: yes
       become: yes
-    - name: Actualiza cache, paquetes, y autoremueve
+    - name: Actualiza cache
       apt:
-        upgrade: dist 
         update_cache: yes
-        # autoremove not available in 16.04's ansible
+      become: yes
+    - name: Actualiza paquetes
+      apt:
+        upgrade: dist
+      become: yes
+      ignore_errors: true
+    - name: autoremueve
+      apt:
         autoremove: yes
       become: yes
