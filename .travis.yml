@@ -6,7 +6,8 @@ before_install:
 install:
   - sudo pip install ansible
 
-script:   - "ansible-playbook -i inventory/hosts.example --syntax-check servidores/*yml cursos/*yml cursos/*/*yml cursos/*/*/*yml"
+script:   
+  - "ansible-playbook -i inventory/hosts.example --syntax-check servidores/*yml cursos/*yml cursos/*/*yml cursos/*/*/*yml"
   - "echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections"
   - "echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections"
   - "dpkg -l|grep oracle"
