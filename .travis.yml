@@ -8,5 +8,7 @@ install:
 
 script:
   - "ansible-playbook -i inventory/hosts.example --syntax-check servidores/*yml cursos/*yml cursos/*/*yml cursos/*/*/*yml"
+  - "echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections"
+  - "echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections"
   - "sudo ANSIBLE_CONFIG=.ansible-travis.cfg ansible-playbook -i inventory/hosts.example servidores/01-upgrade.yml"
   - "sudo ANSIBLE_CONFIG=.ansible-travis.cfg ansible-playbook -i inventory/hosts.example servidores/02-base_setup.yml"
