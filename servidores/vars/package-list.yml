@@ -1,7 +1,9 @@
 ---
 packages_base:
   - [ 'ansible',
-    'fail2ban']
+    'fail2ban',
+    'lxc',
+    'lxc-dev']
     #    'smartmontools',
     #'bridge-utils',
     #'ifenslave',
