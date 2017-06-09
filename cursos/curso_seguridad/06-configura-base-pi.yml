@@ -66,6 +66,7 @@
       - wipe
       - zaproxy
       - openjdk-8-jre-headless
+      - python-pip
   - name: Habilita anuncio de workstation en avahi
     lineinfile:
       regexp: '^publish-workstation=no'
