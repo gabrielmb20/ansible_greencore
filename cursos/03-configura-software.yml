@@ -39,6 +39,8 @@
       - git
       - python3-pip
       - avahi-discover
+      - udpcast
+      - pv
     become: yes
   - name: Instala asciinema con pip
     pip:
