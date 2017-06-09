@@ -14,7 +14,7 @@
         - heartbleed
       become: yes
       ignore_errors: true
-    - name: Crea contenedor inseguro
+    - name: Crea contenedor heartbleed
       lxc_container:
         name: heartbleed
         container_log: true
@@ -23,7 +23,7 @@
           - lxc.start.auto = 1
           - lxc.start.delay = 120
           - lxc.start.order = 0
-          - lxc.network.hwaddr = {{ inseguromac }}
+          - lxc.network.hwaddr = {{ mactls }}
         template: download
         state: started
         template_options: -d ubuntu -r precise -a amd64
@@ -34,6 +34,6 @@
     - name: Crea configuración base para todos los contenedores
       command: lxc-attach -n {{ item[0] }} -- {{ item[1] }}
       with_nested:
-        - [ 'inseguro' ]
-        - [ 'apt-get update', 'apt-get install python ssh sudo psmisc -y', 'systemctl enable ssh', 'systemctl start ssh', 'useradd -s /bin/bash -G sudo -m -p "$6$dF3C39/G$6oRDu6OCq9Td2hU1iN4lRyMTIPtTkq3bIivTAEqxUGOH6LRAkmkGcqjlLN4jT6S1buHEUmCJAqIhqnPcMKbxE1" greencore' ]
+        - [ 'heartbleed' ]
+        - [ 'apt-get update', 'apt-get install python ssh sudo psmisc -y', 'service ssh restart', 'useradd -s /bin/bash -G sudo -m -p "$6$dF3C39/G$6oRDu6OCq9Td2hU1iN4lRyMTIPtTkq3bIivTAEqxUGOH6LRAkmkGcqjlLN4jT6S1buHEUmCJAqIhqnPcMKbxE1" greencore' ]
       become: yes
