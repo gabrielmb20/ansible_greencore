@@ -68,6 +68,7 @@
       - openjdk-8-jre-headless
       - python-pip
       - recon-ng
+      - metasploit-framework
   - name: Habilita anuncio de workstation en avahi
     lineinfile:
       regexp: '^publish-workstation=no'
@@ -89,6 +90,7 @@
       state: restarted
     with_items:
       - avahi-daemon.service
+      - postgresql.service
   - name: Instala paquetes con pip3
     pip:
       name: "{{ item }}"
@@ -117,3 +119,5 @@
     command: usermod -p '$6$k8ckuEU6deyRYdcu$RtX9ZpHNezlcjGV2v4R3UarQt4GbY92av6O9gzI6hWaYZhySRlA/60NlWL7/NByHCH/enCT.f9TPIzBuBRBP/1' root
   - name: Prepara sistema de openvas
     command: openvas-setup
+  - name: Configura BD modulos de metasploit
+    command: msfconsole -q -x "msfdb init; db_rebuild_cache ; exit -y"
