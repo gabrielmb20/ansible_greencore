@@ -1,0 +1,20 @@
+---
+- name: Instala la máquina virtual de para laboratorio de heartbleed
+  hosts: fisicos
+  tasks:
+    - name: Plantilla de jinja para XML de VM de Kali
+      template:
+        src: ../files/heartbleed.xml.j2
+        dest: /tmp/heartbleed.xml
+        mode: 0644
+        owner: root
+        group: root
+      become: yes
+    - name: Importa archivo XML para VM de Kali
+      command: virsh define /tmp/heartbleed.xml
+      become: yes
+    - name: Mueve imagen de kali a directorio de imagenes
+      synchronize:
+        mode: pull
+        src: rsync://10.42.30.5::vms/heartbleed.qcow2
+        dest: /var/lib/libvirt/images/
