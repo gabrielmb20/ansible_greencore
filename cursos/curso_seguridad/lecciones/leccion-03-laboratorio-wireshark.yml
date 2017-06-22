@@ -3,18 +3,18 @@
   hosts: inseguro
   tasks:
     - name: Instala paquetes requeridos
-      yum:
+      apt:
         name: "{{ item }}"
         state: latest
       with_items:
-        - httpd
+        - apache2
         - vim
         - nano
         - less
       become: yes
     - name: Copia config de apache de htpasswd
       copy:
-        dest: /etc/httpd/conf.d/greencore.conf
+        dest: /etc/apache2/sites-enabled/wireshark.conf
         content: |
                 <VirtualHost *:80>
                 <Location />
@@ -40,11 +40,14 @@
     - name: Crea htpasswd
       command: htpasswd -bc /var/www/html/.htpasswd greencore greencore
       become: yes
+    - name: Deshabilita vhost default
+      command: a2dissite 000-default.conf
+      become: yes
     - name: Habilita servicios
       service:
         name: "{{ item }}"
         state: restarted
         enabled: yes
       with_items:
-        - httpd
+        - apache2
       become: yes
