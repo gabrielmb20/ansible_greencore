@@ -3,7 +3,7 @@
   hosts: inseguro
   tasks:
     - name: Instala paquetes requeridos
-      yum:
+      apt:
         name: "{{ item }}"
         state: latest
       with_items:
