@@ -18,8 +18,8 @@
     become: yes
     when: grub_default_biosdevname.changed
   - name: Plantilla de jinja para archivo interfaces
-    template:
-      src: files/interfaces.j2
+    copy:
+      src: files/interfaces
       dest: /etc/network/interfaces
       mode: 0644
       owner: root
@@ -56,10 +56,6 @@
       mode: 0644
       owner: root
       group: root
-    become: yes
-  - name: Define un hostname para equipo fisico
-    hostname:
-      name: "{{ hostname }}"
     become: yes
   - name: Crea usuario greencore con grupos necesarios
     user:
@@ -124,3 +120,41 @@
       state: present
       recursive: yes
     become: yes
+  - name: Apaga todos los contenedores
+    command: "lxc-stop -n {{ item }}"
+    with_items:
+      - inseguro
+    become: yes
+    ignore_errors: true
+  - name: Destruye todos los contenedores
+    command: "lxc-destroy -n {{ item }}"
+    with_items:
+      - inseguro
+    become: yes
+    ignore_errors: true
+  - name: Crea contenedor inseguro
+    lxc_container:
+      name: inseguro
+      container_log: true
+      container_config:
+        - lxc.network.link = br0
+        - lxc.start.auto = 1
+        - lxc.start.delay = 120
+        - lxc.start.order = 0
+        - lxc.network.hwaddr = {{ inseguromac }}
+      template: download
+      state: started
+      template_options: -d ubuntu -r xenial -a amd64
+    become: yes
+  - name: Apaga todos los contenedores
+    command: "lxc-stop -n {{ item }}"
+    with_items:
+      - inseguro
+    become: yes
+    ignore_errors: true
+  - name: Destruye todos los contenedores
+    command: "lxc-destroy -n {{ item }}"
+    with_items:
+      - inseguro
+    become: yes
+    ignore_errors: true
